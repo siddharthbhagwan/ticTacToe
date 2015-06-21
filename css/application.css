@@ -26,3 +26,8 @@ h1 {
 	text-align: center;
 	padding: 20px;
 }
+
+.side-borders {
+	border-left: 1px solid #DDDDDD;
+	border-right: 1px solid #DDDDDD;
+}
