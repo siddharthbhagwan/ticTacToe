@@ -1,8 +1,5 @@
 'use strict'
 
-var rows = 3;
-// var nowPlaying = new Player();
-
 var nowPlaying = (function (){
   var value = 'X';
 
@@ -10,6 +7,8 @@ var nowPlaying = (function (){
 
   // Private board IFFE
   var board = (function(){
+    var rows = 3;
+
     return {
 
       // Check if won by column
@@ -62,9 +61,14 @@ var nowPlaying = (function (){
         status_array.push(board.diagonal2());
 
         if(status_array.indexOf(nowPlaying.winCheck()) === -1){
-          nowPlaying.toggle();
+          if ($('table td:empty').length === 0 ){
+            $('.game-status').text('Draw! Reset to begin again!');
+          } else {
+            nowPlaying.toggle();
+          }
         } else {
-          $('.game-status').text(nowPlaying.current() + ' Wins! Game Over')
+          $('.game-status').text(nowPlaying.current() + ' Wins! Game Over');
+          $('td').unbind('click mouseenter mouseleave');
         }
       }
     }
@@ -105,7 +109,8 @@ var nowPlaying = (function (){
     },
 
     markValue: function(){
-      if ($(this).text() === ''){
+      if (this.style.opacity === '0.2'){
+        this.style.opacity = '1';
         $(this).text(nowPlaying.current());
         board.checkWinner();
       }
@@ -117,21 +122,28 @@ var nowPlaying = (function (){
 function disableCell(){
   if ($(this).text() != ''){
     this.style.backgroundColor='gainsboro';
+  } else {
+    $(this).text(nowPlaying.current());
+    this.style.opacity='0.2';
   }
 }
 
 function enableCell(){
-  if ($(this).text() != ''){
-    this.style.backgroundColor='white';
+  this.style.backgroundColor='white';
+  if (this.style.opacity === '0.2'){
+    $(this).text('');
+    this.style.opacity='1';
   }
 }
 
 function resetBoard(){
   $('td').text('');
+  $('td').hover(disableCell, enableCell)
+  .on('click', nowPlaying.markValue);
 }
 
 $(document).ready(function(){
-  $('td').hover(disableCell, enableCell);
-  $('td').on('click', nowPlaying.markValue);
+  $('td').hover(disableCell, enableCell)
+  .on('click', nowPlaying.markValue);
   $('#reset').on('click', resetBoard);
 });
