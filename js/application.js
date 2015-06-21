@@ -18,7 +18,7 @@ var nowPlaying = (function (){
           var cell = i.toString() + n.toString();
           result = result + $("#" + cell).text();
         }
-        result.replace(/undefined/g, '').trim();
+        return result.replace(/undefined/g, '').trim();
       },
 
       // Check if won by row
@@ -67,8 +67,45 @@ var nowPlaying = (function (){
             nowPlaying.toggle();
           }
         } else {
+          board.highlight(status_array.indexOf(nowPlaying.winCheck()));
           $('.game-status').text(nowPlaying.current() + ' Wins! Game Over');
           $('td').unbind('click mouseenter mouseleave');
+        }
+      },
+
+      highlight: function(n){
+        switch (n){
+          case 0: //col 0
+            $("#00, #10, #20").css('color','#B03060');
+            break;
+
+          case 1: //col 2
+            $("#00, #01, #02").css('color','#B03060');
+            break;
+
+          case 2:
+            $("#01, #11, #21").css('color','#B03060');
+            break;
+
+          case 3:
+            $("#10, #11, #12").css('color','#B03060');
+            break;              
+
+          case 4:
+            $("#02, #12, #22").css('color','#B03060');
+            break;
+
+          case 5:
+            $("#20, #21, #22").css('color','#B03060');
+            break;
+
+          case 6:
+            $("#00, #11, #22").css('color','#B03060');
+            break;
+
+          case 7:
+            $("#02, #11, #20").css('color','#B03060');
+            break;
         }
       }
     }
@@ -139,7 +176,8 @@ function enableCell(){
 function resetBoard(){
   $('td').text('');
   $('td').hover(disableCell, enableCell)
-  .on('click', nowPlaying.markValue);
+  .on('click', nowPlaying.markValue)
+  .css('color', '#000000')
 }
 
 $(document).ready(function(){
