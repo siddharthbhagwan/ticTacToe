@@ -33,65 +33,53 @@ function markValue(){
 
 function checkWinner(){
   var status_array = new Array;
-  status_array.push(row0());
-  status_array.push(row1());
-  status_array.push(row2());
-  status_array.push(col0());
-  status_array.push(col1());
-  status_array.push(col2());
+  for (var i=0; i<rows; i++){
+    status_array.push(col(i));
+    status_array.push(row(i));    
+  }
+  status_array.push(diagonal1());
+  status_array.push(diagonal2());
   
   if(status_array.indexOf(nowPlaying.winCheck()) === -1){
     nowPlaying.toggle();
   } else {
-    alert('OVER');
+    $(".game-status").text(nowPlaying.current() + " Wins! Game Over")
   }
 }
 
-function row0() {
+function col(n) {
   var result;
-  result = result + $("#0").text();
-  result = result + $("#1").text();
-  result = result + $("#2").text();
+  for(var i = 0;i<rows; i++){
+    var cell = i.toString() + n.toString();
+    result = result + $("#" + cell).text();
+  }
   return result.replace(/undefined/g, '').trim();
 }
 
-function row1() {
+function row(n) {
   var result;
-  result = result + $("#3").text();
-  result = result + $("#4").text();
-  result = result + $("#5").text();
+  for(var i = 0;i<rows; i++){
+    var cell = n.toString() + i.toString();
+    result = result + $("#" + cell).text();
+  }
   return result.replace(/undefined/g, '').trim();
 }
 
-function row2() {
+function diagonal1(){
   var result;
-  result = result + $("#6").text();
-  result = result + $("#7").text();
-  result = result + $("#8").text();
+  for(var i = 0;i<rows; i++){
+    var cell = i.toString() + i.toString();
+    result = result + $("#" + cell).text();
+  }
   return result.replace(/undefined/g, '').trim();
 }
 
-function col0() {
+function diagonal2(){
   var result;
-  result = result + $("#0").text();
-  result = result + $("#3").text();
-  result = result + $("#6").text();
-  return result.replace(/undefined/g, '').trim();
-}
-
-function col1() {
-  var result;
-  result = result + $("#1").text();
-  result = result + $("#4").text();
-  result = result + $("#7").text();
-  return result.replace(/undefined/g, '').trim();
-}
-
-function col2() {
-  var result;
-  result = result + $("#2").text();
-  result = result + $("#5").text();
-  result = result + $("#8").text();
+  for(var i = 0;i<rows; i++){
+    var cell = i.toString() + (rows - i - 1).toString();
+    result = result + $("#" + cell).text();
+  }
   return result.replace(/undefined/g, '').trim();
 }
 
