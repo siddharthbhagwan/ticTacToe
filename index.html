@@ -14,6 +14,11 @@
 <body>
 
 <div class="container">
+
+  <head>
+    <h1>Tic Tac Toe!</h1>    
+  </head>
+
   <div class="row">
     <div class="col-md-4 col-md-offset-4">
       <table class="table table bordered">
@@ -41,8 +46,22 @@
   </div>
 
   <div class="row">
+    <div class="col-md-4 col-md-offset-4 next-turn well well-sm">
+      It is <span id="turn">X's</span> turn to play
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-md-4 col-md-offset-4 game-status">
-      Start! X goes first
+      Start!
+    </div>
+  </div>
+
+  <br/>
+
+  <div class="row">
+    <div class="col-md-4 col-md-offset-4 reset">
+      <input type="button" value="Reset" class="btn btn-danger" id="reset" />
     </div>
   </div>
 </div>

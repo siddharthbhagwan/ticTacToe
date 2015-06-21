@@ -1,7 +1,6 @@
 'use strict'
 
 var rows = 3;
-
 var nowPlaying = new Player();
 
 function Player(){
@@ -13,8 +12,12 @@ function Player(){
 
   this.toggle = function(){
     if(value === 'X'){
-      return value = 'O';
+      value = 'O';
+      $('#turn').text(value + "'s");
+      return value;
     } else {
+      value = 'X';
+      $('#turn').text(value + "'s");
       return value = 'X';
     }
   };
@@ -39,11 +42,11 @@ function checkWinner(){
   }
   status_array.push(diagonal1());
   status_array.push(diagonal2());
-  
+
   if(status_array.indexOf(nowPlaying.winCheck()) === -1){
     nowPlaying.toggle();
   } else {
-    $(".game-status").text(nowPlaying.current() + " Wins! Game Over")
+    $('.game-status').text(nowPlaying.current() + ' Wins! Game Over')
   }
 }
 
@@ -60,7 +63,7 @@ function row(n) {
   var result;
   for(var i = 0;i<rows; i++){
     var cell = n.toString() + i.toString();
-    result = result + $("#" + cell).text();
+    result = result + $('#' + cell).text();
   }
   return result.replace(/undefined/g, '').trim();
 }
@@ -69,7 +72,7 @@ function diagonal1(){
   var result;
   for(var i = 0;i<rows; i++){
     var cell = i.toString() + i.toString();
-    result = result + $("#" + cell).text();
+    result = result + $('#' + cell).text();
   }
   return result.replace(/undefined/g, '').trim();
 }
@@ -78,7 +81,7 @@ function diagonal2(){
   var result;
   for(var i = 0;i<rows; i++){
     var cell = i.toString() + (rows - i - 1).toString();
-    result = result + $("#" + cell).text();
+    result = result + $('#' + cell).text();
   }
   return result.replace(/undefined/g, '').trim();
 }
@@ -95,7 +98,12 @@ function enableCell(){
   }
 }
 
+function resetBoard(){
+  $('td').text('');
+}
+
 $(document).ready(function(){
   $('td').hover(disableCell, enableCell);
   $('td').on('click', markValue);
+  $('#reset').on('click', resetBoard);
 });
