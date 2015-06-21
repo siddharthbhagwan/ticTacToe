@@ -1,17 +1,81 @@
 'use strict'
 
 var rows = 3;
-var nowPlaying = new Player();
+// var nowPlaying = new Player();
 
-function Player(){
+var nowPlaying = (function (){
   var value = 'X';
 
-  this.current = function(){
-      return value;
-  };
+  // Private Helper Funtions --------------------------
 
-  this.toggle = function(){
-    if(value === 'X'){
+  // Private board IFFE
+  var board = (function(){
+    return {
+
+      // Check if won by column
+      col: function(n){
+        var result;
+        for(var i = 0;i<rows; i++){
+          var cell = i.toString() + n.toString();
+          result = result + $("#" + cell).text();
+        }
+        result.replace(/undefined/g, '').trim();
+      },
+
+      // Check if won by row
+      row: function(n){
+        var result;
+        for(var i = 0;i<rows; i++){
+          var cell = n.toString() + i.toString();
+          result = result + $('#' + cell).text();
+        }
+        return result.replace(/undefined/g, '').trim();
+      },
+
+      // Check if won diagonally
+      diagonal1: function(){
+        var result;
+        for(var i = 0;i<rows; i++){
+          var cell = i.toString() + i.toString();
+          result = result + $('#' + cell).text();
+        }
+        return result.replace(/undefined/g, '').trim();
+      },
+
+      // Check if won diagonally
+      diagonal2: function(){
+        var result;
+        for(var i = 0;i<rows; i++){
+          var cell = i.toString() + (rows - i - 1).toString();
+          result = result + $('#' + cell).text();
+        }
+        return result.replace(/undefined/g, '').trim();
+      },
+
+      checkWinner: function(){
+        var status_array = new Array;
+        for (var i=0; i<rows; i++){
+          status_array.push(board.col(i));
+          status_array.push(board.row(i));    
+        }
+        status_array.push(board.diagonal1());
+        status_array.push(board.diagonal2());
+
+        if(status_array.indexOf(nowPlaying.winCheck()) === -1){
+          nowPlaying.toggle();
+        } else {
+          $('.game-status').text(nowPlaying.current() + ' Wins! Game Over')
+        }
+      }
+    }
+  })();
+
+  function _returnValue(){
+    return value;
+  }
+
+  function _toggleUpdateXO(){
+  if (value === 'X'){
       value = 'O';
       $('#turn').text(value + "'s");
       return value;
@@ -20,71 +84,35 @@ function Player(){
       $('#turn').text(value + "'s");
       return value = 'X';
     }
-  };
-
-  this.winCheck = function(){
-    return value + value + value;
   }
-}
 
-function markValue(){  
-  if ($(this).text() === ''){
-    $(this).text(nowPlaying.current());
-    checkWinner();
-  }
-}
+  // Private Helper Functions End -----------
 
-function checkWinner(){
-  var status_array = new Array;
-  for (var i=0; i<rows; i++){
-    status_array.push(col(i));
-    status_array.push(row(i));    
-  }
-  status_array.push(diagonal1());
-  status_array.push(diagonal2());
+  // Public Functions that are exposed
 
-  if(status_array.indexOf(nowPlaying.winCheck()) === -1){
-    nowPlaying.toggle();
-  } else {
-    $('.game-status').text(nowPlaying.current() + ' Wins! Game Over')
-  }
-}
+  return {
 
-function col(n) {
-  var result;
-  for(var i = 0;i<rows; i++){
-    var cell = i.toString() + n.toString();
-    result = result + $("#" + cell).text();
-  }
-  return result.replace(/undefined/g, '').trim();
-}
+    current: function(){
+      return _returnValue();
+    },
 
-function row(n) {
-  var result;
-  for(var i = 0;i<rows; i++){
-    var cell = n.toString() + i.toString();
-    result = result + $('#' + cell).text();
-  }
-  return result.replace(/undefined/g, '').trim();
-}
+    toggle: function(){
+      return _toggleUpdateXO();
+    },
 
-function diagonal1(){
-  var result;
-  for(var i = 0;i<rows; i++){
-    var cell = i.toString() + i.toString();
-    result = result + $('#' + cell).text();
-  }
-  return result.replace(/undefined/g, '').trim();
-}
+    winCheck: function(){
+      return value + value + value;
+    },
 
-function diagonal2(){
-  var result;
-  for(var i = 0;i<rows; i++){
-    var cell = i.toString() + (rows - i - 1).toString();
-    result = result + $('#' + cell).text();
+    markValue: function(){
+      if ($(this).text() === ''){
+        $(this).text(nowPlaying.current());
+        board.checkWinner();
+      }
+    }
   }
-  return result.replace(/undefined/g, '').trim();
-}
+})();
+
 
 function disableCell(){
   if ($(this).text() != ''){
@@ -104,6 +132,6 @@ function resetBoard(){
 
 $(document).ready(function(){
   $('td').hover(disableCell, enableCell);
-  $('td').on('click', markValue);
+  $('td').on('click', nowPlaying.markValue);
   $('#reset').on('click', resetBoard);
 });
