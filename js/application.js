@@ -75,11 +75,11 @@ var nowPlaying = (function (){
 
       highlight: function(n){
         switch (n){
-          case 0: //col 0
+          case 0:
             $("#00, #10, #20").css('color','#B03060');
             break;
 
-          case 1: //col 2
+          case 1:
             $("#00, #01, #02").css('color','#B03060');
             break;
 
@@ -149,6 +149,7 @@ var nowPlaying = (function (){
       if (this.style.opacity === '0.2'){
         this.style.opacity = '1';
         $(this).text(nowPlaying.current());
+        $('.game-status').text('Woah!');
         board.checkWinner();
       }
     }
@@ -177,7 +178,8 @@ function resetBoard(){
   $('td').text('');
   $('td').hover(disableCell, enableCell)
   .on('click', nowPlaying.markValue)
-  .css('color', '#000000')
+  .css('color', '#000000');
+  $('.game-status').text('Start!');
 }
 
 $(document).ready(function(){
