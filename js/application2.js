@@ -69,16 +69,19 @@ var board = {
   },
 
   reset: function() {
-    $(".square").text("");
+    $('.square').text('');
+    $('td').on('click', placeAMark);
     player.currentPlayer = 'X';
   }
 };
 
-$(document).ready(function() {
-  $('td').on('click', function(){
-    player.play(($(this).attr('id')));
-  });
+function placeAMark() {
+  player.play(($(this).attr('id')));
+}
 
+$(document).ready(function() {
+  $('td').on('click', placeAMark);
+  
   $('#reset').on('click', function(){
     board.reset();
     util.updateTurnUI(player.currentPlayer);
