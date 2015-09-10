@@ -2,14 +2,14 @@
 
 var util = {
 
-  valCheck: function(list) {
+  checkWinningStrike: function(list) {
     var comboList = [];
     list.forEach(function(combination) {
-      var tileCombo = "";
-      combination.forEach(function(tileId) {
-        tileCombo += $("#" + tileId).text();
+      var squareCombo = "";
+      combination.forEach(function(squareId) {
+        squareCombo += $("#" + squareId).text();
       });
-      comboList.push(tileCombo);
+      comboList.push(squareCombo);
     });
     return comboList.indexOf(Array(4).join(player.currentPlayer)) > -1 ? true : false;
   },
@@ -48,7 +48,7 @@ var board = {
   ],
 
   _checkForWinner: function() {
-    util.valCheck(this.winningStrike) ? this._gameOver() : false;
+    util.checkWinningStrike(this.winningStrike) ? this._gameOver() : false;
   },
 
   _isTheSquareMarked: function(squareId) {
@@ -64,6 +64,20 @@ var board = {
     $(".square").text("");
   },
 
+  hoverIn: function(squareId) {
+    console.log('hover in');
+    $('#' + squareId).text(player.currentPlayer);
+  },
+
+  hoverOut: function(squareId) {
+    console.log('hover out');
+    $('#' + squareId).text('');
+  },
+
+  _freeze: function() {
+    console.log('freeze!');
+  },
+
   reset: function() {
     $(".square").text("");
     player.currentPlayer = 'X';
@@ -73,6 +87,12 @@ var board = {
 $(document).ready(function() {
   $('td').on('click', function(){
     player.play(($(this).attr('id')));
+  });
+
+  $('td').hover(function(){
+    // board.hoverIn($(this).attr('id'));
+  }, function() {
+    // board.hoverOut($(this).attr('id'));
   });
 
   $('#reset').on('click', function(){
