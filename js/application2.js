@@ -61,21 +61,11 @@ var board = {
 
   _gameOver: function() {
     alert(player.currentPlayer + ' wins!');
-    $(".square").text("");
-  },
-
-  hoverIn: function(squareId) {
-    console.log('hover in');
-    $('#' + squareId).text(player.currentPlayer);
-  },
-
-  hoverOut: function(squareId) {
-    console.log('hover out');
-    $('#' + squareId).text('');
+    this._freeze();
   },
 
   _freeze: function() {
-    console.log('freeze!');
+    $('td').unbind('click hover');
   },
 
   reset: function() {
@@ -87,12 +77,6 @@ var board = {
 $(document).ready(function() {
   $('td').on('click', function(){
     player.play(($(this).attr('id')));
-  });
-
-  $('td').hover(function(){
-    // board.hoverIn($(this).attr('id'));
-  }, function() {
-    // board.hoverOut($(this).attr('id'));
   });
 
   $('#reset').on('click', function(){
